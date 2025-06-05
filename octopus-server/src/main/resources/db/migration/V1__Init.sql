@@ -111,3 +111,17 @@ CREATE TABLE `transform_event_record`
     INDEX idx_long_url_digest (`long_url_digest`),
     INDEX idx_unique_identity (`unique_identity`)
 ) COMMENT '转换事件记录';
+CREATE TABLE `user_role` (
+    `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
+    `role_name` VARCHAR(32) NOT NULL COMMENT '角色名称'
+) COMMENT '用户角色';
+
+CREATE TABLE `user` (
+    `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
+    `username` VARCHAR(64) NOT NULL COMMENT '用户名',
+    `password` VARCHAR(128) NOT NULL COMMENT '密码',
+    `role_id` BIGINT NOT NULL COMMENT '角色ID',
+    `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `edit_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE uniq_username (`username`)
+) COMMENT '用户表';
