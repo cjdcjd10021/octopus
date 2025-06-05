@@ -7,10 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -51,5 +48,21 @@ public class OctopusController {
         urlMapService.processTransform(context);
         // 这里有一个技巧,flush用到的线程和内部逻辑处理的线程不是同一个线程,所有要用到TTL
         return Mono.fromRunnable(context.getRedirectAction());
+    }
+
+    @PostMapping(path = "/api/url")
+    public String create(@RequestBody cn.throwx.octopus.server.model.entity.UrlMap body) {
+        return urlMapService.createUrlMap("localhost:9099", body);
+    }
+
+    @PutMapping(path = "/api/url/{id}")
+    public Long edit(@PathVariable("id") Long id, @RequestBody cn.throwx.octopus.server.model.entity.UrlMap body) {
+        body.setId(id);
+        return urlMapService.editUrlMap(body);
+    }
+
+    @DeleteMapping(path = "/api/url/{id}")
+    public void delete(@PathVariable("id") Long id) {
+        urlMapService.deleteUrlMap(id);
     }
 }
